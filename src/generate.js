@@ -8,7 +8,7 @@ const PuppeteerWrapper = require("./lib/puppeteer-wrapper.js");
 
 //#region Setup - Dependency Injection-----------------------------------------------
 const _logger = new Logger();
-const _filePaths = new FilePaths(_logger, "puppeteer-electron-quickstart");
+const _filePaths = new FilePaths(_logger, "odi");
 const _puppeteerWrapper = new PuppeteerWrapper(_logger, _filePaths, {
   headless: true,
 });
@@ -144,7 +144,6 @@ async function main() {
   generateBtn.disabled = false;
   generateBtn.innerText = "generate";
   generateBtn.style.backgroundColor = "lightseagreen";
-  await _puppeteerWrapper.close();
 }
 
 const generate = async () => {

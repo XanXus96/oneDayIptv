@@ -39,7 +39,7 @@ class FilePaths {
   }
 
   settingsPath() {
-    return path.join(this.appFolderPath(), "settings.json");
+    return path.join(this.appFolderPath(), "settings.txt");
   }
 
   logsPath() {

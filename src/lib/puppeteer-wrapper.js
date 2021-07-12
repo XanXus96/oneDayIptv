@@ -118,7 +118,7 @@ class PuppeteerWrapper {
     } else if (process.platform === "darwin") {
       return "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
     } else {
-      return "/usr/bin/chromium-browser";
+      return "/usr/bin/google-chrome";
     }
   }
 
