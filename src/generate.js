@@ -1,17 +1,20 @@
 //#region Imports
 // Library ----------------------------------------------------------------------------------
 const Logger = require("./lib/logger.js");
-const FilePaths = require("./lib/file-paths.js");
+//const FilePaths = require("./lib/file-paths.js");
 const PuppeteerWrapper = require("./lib/puppeteer-wrapper.js");
 
 //#endregion
 
 //#region Setup - Dependency Injection-----------------------------------------------
 const _logger = new Logger();
-const _filePaths = new FilePaths(_logger, "odi");
-const _puppeteerWrapper = new PuppeteerWrapper(_logger, _filePaths, {
-  headless: true,
-});
+//const _filePaths = new FilePaths(_logger, "odi");
+const _puppeteerWrapper = new PuppeteerWrapper(
+  _logger,
+  /**_filePaths,*/ {
+    headless: true,
+  }
+);
 
 //#endregion
 
@@ -139,11 +142,12 @@ async function main() {
   }&password=${
     textSplitted[3].split(": ")[1]
   }&type=m3u_plus&output=hls</strong></font>`;
-  output1.innerHTML = html.replace('brown', 'aliceblue') + link;
+  output1.innerHTML = html.replace("brown", "aliceblue") + link;
   output2.innerHTML = `<font color="orange"><strong>Email: ${randomUsername}@mohmal.in<br>Username: ${randomUsername}<br>Password: ${randomUsername}<br></strong></font><font style="color: red;"><strong>YOU STILL CAN GENERATE TWO OTHERS ONE DAY PLAYLISTS WITH THE SAME ACCOUNT IF YOU WANT</strong></font>`;
   generateBtn.disabled = false;
   generateBtn.innerText = "generate";
   generateBtn.style.backgroundColor = "lightseagreen";
+  await _puppeteerWrapper.cleanup();
 }
 
 const generate = async () => {

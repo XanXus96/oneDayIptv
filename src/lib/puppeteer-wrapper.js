@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const fs = require("fs");
 
 /**
@@ -13,23 +13,23 @@ const fs = require("fs");
  * options: {headless, width, height}
  */
 class PuppeteerWrapper {
-  constructor(logger, filePaths, options) {
+  constructor(logger, /** filePaths,*/ options) {
     this._logger = logger;
-    this._filePaths = filePaths;
+    // this._filePaths = filePaths;
     this._options = options || { headless: true };
 
     // Public
-    this.chromePath = undefined;
+    // this.chromePath = undefined;
     this.browser = undefined;
   }
 
   //#region Public API setup - cleanup
 
   async setup() {
-    const isChromePathSet = await this._setChromePath();
-    if (!isChromePathSet) {
-      return false;
-    }
+    // const isChromePathSet = await this._setChromePath();
+    // if (!isChromePathSet) {
+    //   return false;
+    // }
 
     const args = [];
     if (this._options.width) {
@@ -39,7 +39,7 @@ class PuppeteerWrapper {
     this._logger.logInfo("Setting up puppeteer...");
     this.browser = await puppeteer.launch({
       headless: this._options.headless,
-      executablePath: this.chromePath,
+      //executablePath: this.chromePath,
       args,
     });
     this._logger.logInfo("Puppeteer initialized");
@@ -66,61 +66,61 @@ class PuppeteerWrapper {
 
   //#region Helpers
 
-  async _setChromePath() {
-    this.chromePath = await this._getSavedPath();
-    if (this.chromePath) {
-      if (fs.existsSync(this.chromePath)) return true;
+  // async _setChromePath() {
+  //   this.chromePath = await this._getSavedPath();
+  //   if (this.chromePath) {
+  //     if (fs.existsSync(this.chromePath)) return true;
 
-      // The saved path does not exists
-      this._logger.logError(
-        `Saved Chrome path does not exists: ${this.chromePath}`
-      );
-    }
+  //     // The saved path does not exists
+  //     this._logger.logError(
+  //       `Saved Chrome path does not exists: ${this.chromePath}`
+  //     );
+  //   }
 
-    // Try the default path
-    this.chromePath = this._getDefaultOsPath();
-    if (!fs.existsSync(this.chromePath)) {
-      this._logger.logError(
-        `Default chrome path does not exists: ${this.chromePath}`
-      );
-      this._logger.logError(
-        `Try to set chrome path in settings file: ${this._filePaths.settingsPath()}`
-      );
-      return false;
-    }
+  //   // Try the default path
+  //   this.chromePath = this._getDefaultOsPath();
+  //   if (!fs.existsSync(this.chromePath)) {
+  //     this._logger.logError(
+  //       `Default chrome path does not exists: ${this.chromePath}`
+  //     );
+  //     this._logger.logError(
+  //       `Try to set chrome path in settings file: ${this._filePaths.settingsPath()}`
+  //     );
+  //     return false;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  _getSavedPath() {
-    const settingsPath = this._filePaths.settingsPath();
+  // _getSavedPath() {
+  //   const settingsPath = this._filePaths.settingsPath();
 
-    return new Promise((resolve, reject) => {
-      if (!fs.existsSync(settingsPath)) {
-        resolve(undefined);
-        return;
-      }
-      fs.readFile(settingsPath, "utf8", (err, fileContent) => {
-        if (err) {
-          this._logger.logError(err);
-          reject();
-          return;
-        }
+  //   return new Promise((resolve, reject) => {
+  //     if (!fs.existsSync(settingsPath)) {
+  //       resolve(undefined);
+  //       return;
+  //     }
+  //     fs.readFile(settingsPath, "utf8", (err, fileContent) => {
+  //       if (err) {
+  //         this._logger.logError(err);
+  //         reject();
+  //         return;
+  //       }
 
-        resolve(fileContent);
-      });
-    });
-  }
+  //       resolve(fileContent);
+  //     });
+  //   });
+  // }
 
-  _getDefaultOsPath() {
-    if (process.platform === "win32") {
-      return "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
-    } else if (process.platform === "darwin") {
-      return "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-    } else {
-      return "/usr/bin/google-chrome";
-    }
-  }
+  // _getDefaultOsPath() {
+  //   if (process.platform === "win32") {
+  //     return "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
+  //   } else if (process.platform === "darwin") {
+  //     return "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+  //   } else {
+  //     return "/usr/bin/google-chrome";
+  //   }
+  // }
 
   //#endregion
 }
